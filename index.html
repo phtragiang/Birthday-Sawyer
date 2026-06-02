@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Sawyer!</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        overflow: hidden;
+    }
+
+    .container {
+        text-align: center;
+        color: #fff;
+    }
+
+    h1 {
+        font-size: 3rem;
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .cake {
+        position: relative;
+        width: 220px;
+        margin: 40px auto;
+    }
+
+    .layer {
+        border-radius: 10px;
+        margin: auto;
+    }
+
+    .layer1 {
+        width: 220px;
+        height: 70px;
+        background: #ff6f61;
+    }
+
+    .layer2 {
+        width: 170px;
+        height: 60px;
+        background: #ff8a80;
+    }
+
+    .layer3 {
+        width: 120px;
+        height: 50px;
+        background: #ffab91;
+    }
+
+    .candles {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-bottom: -10px;
+    }
+
+    .candle {
+        width: 10px;
+        height: 35px;
+        background: white;
+        position: relative;
+    }
+
+    .flame {
+        position: absolute;
+        top: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 12px;
+        height: 18px;
+        background: gold;
+        border-radius: 50%;
+        animation: flicker 0.3s infinite alternate;
+    }
+
+    @keyframes flicker {
+        from { transform: translateX(-50%) scale(1); }
+        to { transform: translateX(-50%) scale(1.2); }
+    }
+
+    button {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 25px;
+        font-size: 1rem;
+        cursor: pointer;
+        background: #fff;
+        color: #ff6f61;
+        font-weight: bold;
+    }
+
+    button:hover {
+        transform: scale(1.05);
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🎉 Happy Birthday Sawyer! 🎂</h1>
+
+    <div class="cake">
+        <div class="candles">
+            <div class="candle"><div class="flame"></div></div>
+            <div class="candle"><div class="flame"></div></div>
+            <div class="candle"><div class="flame"></div></div>
+        </div>
+
+        <div class="layer layer3"></div>
+        <div class="layer layer2"></div>
+        <div class="layer layer1"></div>
+    </div>
+
+    <button onclick="playSong()">▶ Play Happy Birthday</button>
+</div>
+
+<script>
+function playTone(freq, duration, startTime, audioCtx) {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    osc.frequency.value = freq;
+    osc.type = "triangle";
+
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.start(startTime);
+    osc.stop(startTime + duration);
+
+    gain.gain.setValueAtTime(0.15, startTime);
+}
+
+function playSong() {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    const notes = {
+        C4: 261.63,
+        D4: 293.66,
+        E4: 329.63,
+        F4: 349.23,
+        G4: 392.00,
+        A4: 440.00,
+        Bb4: 466.16,
+        C5: 523.25
+    };
+
+    const melody = [
+        ["C4",0.4],["C4",0.4],["D4",0.8],["C4",0.8],["F4",0.8],["E4",1.2],
+        ["C4",0.4],["C4",0.4],["D4",0.8],["C4",0.8],["G4",0.8],["F4",1.2],
+        ["C4",0.4],["C4",0.4],["C5",0.8],["A4",0.8],["F4",0.8],["E4",0.8],["D4",1.2],
+        ["Bb4",0.4],["Bb4",0.4],["A4",0.8],["F4",0.8],["G4",0.8],["F4",1.4]
+    ];
+
+    let currentTime = audioCtx.currentTime;
+
+    melody.forEach(([note, duration]) => {
+        playTone(notes[note], duration, currentTime, audioCtx);
+        currentTime += duration;
+    });
+}
+</script>
+
+</body>
+</html>
